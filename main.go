@@ -96,9 +96,9 @@ func postMessage(webhookURL string, msg Message) error {
 }
 
 func main() {
-	var webhookURL = os.Getenv("INCOMING_WEBHOOK_URL")
+	var webhookURL = os.Getenv("INCOMING_WEBHOOK_URL,required")
 	// success is true if the build is successful, false otherwise.
-	fmt.Println(fmt.Sprintf("Webhook URL: %s", os.Getenv("INCOMING_WEBHOOK_URL")))
+	fmt.Println(fmt.Sprintf("Webhook URL: %s", os.Getenv("INCOMING_WEBHOOK_URL,required")))
 
 	var success = os.Getenv("BITRISE_BUILD_STATUS") == "0"
 	var conf Config
