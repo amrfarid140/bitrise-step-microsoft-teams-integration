@@ -34,14 +34,9 @@ workflows:
         - is_create_path: true
     - path::./:
         title: Step Test
-        description: |-
-          The example input has a default value,
-          you can overwrite it if you want to, just like we did below,
-          but the step would use the default value specified in the `step.yml`
-          file if you would not specify another value.
         run_if: true
         inputs:
-        - example_step_input: Example Step Input's value
+          - INCOMING_WEBHOOK_URL,required: https://outlook.office.com/webhook/5bdfe871-8b29-47d0-82dc-4fd42e02d0b9@dacd0a8f-30ed-4ee0-ad06-de7c7aa659ed/IncomingWebhook/6bcb8d7d07e04dc5880a0830c1e861a0/a05f31c9-bb92-46a8-bbdb-371c36e8902c
     - script:
         inputs:
         - content: |
