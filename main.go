@@ -7,23 +7,25 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"github.com/bitrise-tools/go-steputils/stepconf"
 )
 
-func newMessage(buildOk bool, conf Config) Message {
+func newMessage(buildOk bool, cfg config) Message {
 	message := Message{}
 	message.Type = "MessageCard"
 	message.Context = "http://schema.org/extensions"
 	message.ThemeColor = "0076D7"
 	if buildOk {
-		message.Summary = fmt.Sprintf("%s build number %s succeeded", conf.AppTitle, conf.BuildNumber)
+		message.Summary = fmt.Sprintf("%s build number %s succeeded", cfg.AppTitle, cfg.BuildNumber)
 	} else {
-		message.Summary = fmt.Sprintf("%s build number %s failed", conf.AppTitle, conf.BuildNumber)
+		message.Summary = fmt.Sprintf("%s build number %s failed", cfg.AppTitle, cfg.BuildNumber)
 	}
 	message.Markdown = "true"
 	section := Section{}
-	section.AppTitle = fmt.Sprintf("![AppImage](%s)%s", conf.AppImageURL, conf.AppTitle)
-	section.BuildNumber = conf.BuildNumber
-	section.AppImage = conf.AppImageURL
+	section.AppTitle = fmt.Sprintf("![AppImage](%s)%s", cfg.AppImageURL, cfg.AppTitle)
+	section.BuildNumber = cfg.BuildNumber
+	section.AppImage = cfg.AppImageURL
 
 	buildStatusFact := Fact{}
 	buildStatusFact.Name = "Build Status"
@@ -35,11 +37,11 @@ func newMessage(buildOk bool, conf Config) Message {
 
 	buildNumberFact := Fact{}
 	buildNumberFact.Name = "Build Number"
-	buildNumberFact.Value = conf.BuildNumber
+	buildNumberFact.Value = cfg.BuildNumber
 
 	buildBranchFact := Fact{}
 	buildBranchFact.Name = "Git Branch"
-	buildBranchFact.Value = conf.GitBranch
+	buildBranchFact.Value = cfg.GitBranch
 
 	section.Facts = []Fact{buildStatusFact, buildNumberFact, buildBranchFact}
 
@@ -51,7 +53,7 @@ func newMessage(buildOk bool, conf Config) Message {
 	goToRepoActionCardAction := Action{}
 	goToRepoActionCardAction.Type = "HttpGet"
 	goToRepoActionCardAction.Name = "Go To Repo"
-	goToRepoActionCardAction.Target = conf.RepoURL
+	goToRepoActionCardAction.Target = cfg.RepoURL
 
 	goToBuildActionCard := ActionCard{}
 	goToBuildActionCard.Type = "ActionCard"
@@ -59,7 +61,7 @@ func newMessage(buildOk bool, conf Config) Message {
 	goToBuildActionCardAction := Action{}
 	goToBuildActionCardAction.Type = "HttpGet"
 	goToBuildActionCardAction.Name = "Go To Build"
-	goToBuildActionCardAction.Target = conf.BuildURL
+	goToBuildActionCardAction.Target = cfg.BuildURL
 
 	message.Actions = []ActionCard{goToRepoActionCard, goToBuildActionCard}
 
@@ -96,19 +98,20 @@ func postMessage(webhookURL string, msg Message) error {
 }
 
 func main() {
-	var webhookURL = os.Getenv("INCOMING_WEBHOOK_URL,required")
-	// success is true if the build is successful, false otherwise.
-	fmt.Println(fmt.Sprintf("Webhook URL: %s", os.Getenv("INCOMING_WEBHOOK_URL,required")))
+	var cfg config
+	if err := stepconf.Parse(&cfg); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+		os.Exit(1)
+	}
+	stepconf.Print(cfg)
 
-	var success = os.Getenv("BITRISE_BUILD_STATUS") == "0"
-	var conf Config
-	message := newMessage(success, conf)
-	if err := postMessage(webhookURL, message); err != nil {
+	// success is true if the build is successful, false otherwise.
+	success := os.Getenv("BITRISE_BUILD_STATUS") == "0"
+	message := newMessage(success, cfg)
+	if err := postMessage(cfg.WebhookURL, message); err != nil {
 		fmt.Println(fmt.Sprintf("Error: %s", err))
 		os.Exit(1)
 	}
 
 	fmt.Println("Message successfully sent!")
-
-	os.Exit(0)
 }
