@@ -47,25 +47,24 @@ func newMessage(buildOk bool, cfg config) Message {
 
 	message.Sections = []Section{section}
 
-	goToRepoActionCard := ActionCard{}
-	goToRepoActionCard.Type = "ActionCard"
-	goToRepoActionCard.Name = "Go To Repo"
-	goToRepoActionCardAction := Action{}
-	goToRepoActionCardAction.Type = "HttpGet"
-	goToRepoActionCardAction.Name = "Go To Repo"
-	goToRepoActionCardAction.Target = cfg.RepoURL
+	goToRepoAction := buildUriButton("Go To Repo", cfg.RepoURL)
+	goToBuildAction := buildUriButton("Go To Build", cfg.BuildURL)
 
-	goToBuildActionCard := ActionCard{}
-	goToBuildActionCard.Type = "ActionCard"
-	goToBuildActionCard.Name = "Go To Build"
-	goToBuildActionCardAction := Action{}
-	goToBuildActionCardAction.Type = "HttpGet"
-	goToBuildActionCardAction.Name = "Go To Build"
-	goToBuildActionCardAction.Target = cfg.BuildURL
-
-	message.Actions = []ActionCard{goToRepoActionCard, goToBuildActionCard}
+	message.Actions = []OpenUriAction{goToRepoAction, goToBuildAction}
 
 	return message
+}
+
+func buildUriButton(buttonText string, uri string) OpenUriAction {
+	uriAction := OpenUriAction{}
+	uriAction.Type = "OpenUri"
+	uriAction.Name = buttonText
+	uriTarget := Target{}
+	uriTarget.OS = "default"
+	uriTarget.Uri = uri
+	uriAction.Targets = []Target{uriTarget}
+
+	return uriAction
 }
 
 // postMessage sends a message to a channel.
