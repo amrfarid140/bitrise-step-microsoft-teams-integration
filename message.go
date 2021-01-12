@@ -2,13 +2,13 @@ package main
 
 // Message to send to Microsoft Teams.
 type Message struct {
-	Type       string       `json:"@type"`
-	Context    string       `json:"@context"`
-	ThemeColor string       `json:"themeColor"`
-	Summary    string       `json:"summary"`
-	Markdown   string       `json:"markdown"`
-	Sections   []Section    `json:"sections"`
-	Actions    []ActionCard `json:"potentialAction"`
+	Type       string          `json:"@type"`
+	Context    string          `json:"@context"`
+	ThemeColor string          `json:"themeColor"`
+	Summary    string          `json:"summary"`
+	Markdown   string          `json:"markdown"`
+	Sections   []Section       `json:"sections"`
+	Actions    []OpenUriAction `json:"potentialAction"`
 }
 
 // Section to be shown in the message
@@ -25,24 +25,15 @@ type Fact struct {
 	Value string `json:"value"`
 }
 
-// ActionCard to be added to the message
-type ActionCard struct {
-	Type    string        `json:"@type"`
-	Name    string        `json:"name"`
-	Inputs  []ActionInput `json:"inputs"`
-	Actions []Action      `json:"actions"`
+// OpenUri action for link buttons
+type OpenUriAction struct {
+	Type    string   `json:"@type"`
+	Name    string   `json:"name"`
+	Targets []Target `json:"targets"`
 }
 
-// ActionInput for actions if any
-type ActionInput struct {
-	Type  string `json:"@type"`
-	ID    string `json:"id"`
-	Title string `json:"title"`
-}
-
-// Action to be taken by the action card
-type Action struct {
-	Type   string `json:"@type"`
-	Name   string `json:"name"`
-	Target string `json:"target"`
+// The required Target object that resides inside `OpenUriAction`s
+type Target struct {
+	OS  string `json:"os"`
+	Uri string `json:"uri"`
 }
