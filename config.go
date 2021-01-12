@@ -10,7 +10,6 @@ type config struct {
 	BuildURL          string `env:"BITRISE_BUILD_URL"`
 	BuildTime         string `env:"BITRISE_BUILD_TRIGGER_TIMESTAMP"`
 	CommitMessageBody string `env:"GIT_CLONE_COMMIT_MESSAGE_BODY"`
-	RepoURL           string `env:"GIT_REPOSITORY_URL"`
 	GitBranch         string `env:"BITRISE_GIT_BRANCH"`
 	AppImageURL       string `env:"BITRISE_APP_SLUG"`
 	Workflow          string `env:"BITRISE_TRIGGERED_WORKFLOW_TITLE"`
@@ -28,4 +27,5 @@ type config struct {
 	SectionHeaderImage string `env:"section_header_image"`
 	EnableMarkdown     bool   `env:"enable_markdown"`
 	EnableDebug        bool   `env:"enable_debug"`
+	RepoURL            string `env:"repository_url"`
 }

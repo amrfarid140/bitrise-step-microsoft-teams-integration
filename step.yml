@@ -89,6 +89,16 @@ inputs:
       title: "Section Image"
       subtitle: "Image that is displayed within the MessageCard Section `activityImage`"
 
+  - repository_url: $GIT_REPOSITORY_URL
+    opts:
+      title: "Repository URL"
+      subtitle: "Defines a custom repository location"
+      description: |
+        If no value is given, the step automatically uses the `$GIT_REPOSITORY_URL` var.
+
+        If a Bitrise project is configured via SSH, `$GIT_REPOSITORY_URL` is not a useable
+        URI Target for the MessageCard, so this allows for overriding this value if SSH is configured.
+
   - webhook_url:
     opts:
       title: "Incoming Webhook URL"
