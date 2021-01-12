@@ -25,14 +25,14 @@ toolkit:
     package_name: github.com/amrfarid140/bitrise-step-microsoft-teams-integration
 inputs:
   - repository_url: $GIT_REPOSITORY_URL
-      opts:
-        title: "Repository URL"
-        subtitle: "Defines a custom repository location"
-        description: |
-          If no value is given, the step automatically uses the `$GIT_REPOSITORY_URL` var.
+    opts:
+      title: "Repository URL"
+      subtitle: "Defines a custom repository location"
+      description: |
+        If no value is given, the step automatically uses the `$GIT_REPOSITORY_URL` var.
 
-          If a Bitrise project is configured via SSH, `$GIT_REPOSITORY_URL` is not a useable
-          URI Target for the MessageCard, so this allows for overriding this value if SSH is configured.
+        If a Bitrise project is configured via SSH, `$GIT_REPOSITORY_URL` is not a useable
+        URI Target for the MessageCard, so this allows for overriding this value if SSH is configured.
   - webhook_url:
     opts:
       title: "Incoming Webhook URL"
