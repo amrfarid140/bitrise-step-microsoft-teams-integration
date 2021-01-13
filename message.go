@@ -7,7 +7,6 @@ type Message struct {
 	ThemeColor string          `json:"themeColor"`
 	Title      string          `json:"title"`
 	Summary    string          `json:"summary"`
-	Markdown   string          `json:"markdown"`
 	Sections   []Section       `json:"sections"`
 	Actions    []OpenUriAction `json:"potentialAction"`
 }
@@ -18,6 +17,7 @@ type Section struct {
 	ActivitySubtitle string    `json:"activitySubtitle"`
 	ActivityImage    string    `json:"activityImage"`
 	Facts            []Fact    `json:"facts"`
+	Markdown         bool      `json:"markdown"`
 	Text             string    `json:"text"`
 	HeroImage        HeroImage `json:"heroImage"`
 }

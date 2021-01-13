@@ -33,17 +33,14 @@ inputs:
 
         If no value is given, the default value will be the `BITRISE_APP_TITLE`.
 
-  - enable_markdown: true
-    opts:
-      title: "Enable Markdown"
-      subtitle: "Sets whether the MessageCard should enable Markdown for the card text"
-      description: |
-        Toggles whether the MessageCard should render all text content as Markdown (where applicable).
-
   - enable_debug: false
     opts:
       title: "Enable debug logging"
       subtitle: "Toggles whether to log debug info to the build output"
+      description: |
+        Enables debug logging to the Bitrise console.
+
+        WARNING: This will output the JSON value of the Teams Webhook body, be mindful of what is output here.
 
   - success_theme_color: 359914
     opts:
@@ -65,23 +62,65 @@ inputs:
 
         Defaults to `E04504` if not overridden.
 
+  - enable_primary_section_markdown: true
+    opts:
+      category: "Markdown Rules"
+      title: "Primary Section Markdown"
+      subtitle: "Sets whether the text fields within the MessageCard's first section should render Markdown text"
+      description: |
+        Sets whether to enable Markdown rendering for the each field of the first section of the MessageCard.
+
+        User input fields affected:
+        * section_title
+        * section_subtitle
+        * section_text
+
+  - enable_build_status_facts_markdown: false
+    opts:
+      category: "Markdown Rules"
+      title: "Build Status Facts Markdown"
+      subtitle: "Sets whether each of the facts should render their values as Markdown text"
+      description: |
+        Sets whether to enable Markdown rendering for the default Facts within the MessageCard.
+
+        Fact fields affected:
+        * Build Status
+        * Build Number
+        * Git Branch
+        * Build Triggered
+        * Workflow
+
   - section_title: $GIT_CLONE_COMMIT_AUTHOR_NAME
     opts:
       category: "MessageCard Content"
       title: "Section Title"
       subtitle: "Text that is displayed within the MessageCard Section `activityTitle`"
+      description: |
+        Sets the text value of `activityTitle` within the primary Section of the MessageCard.
+
+        By default, this will be set to the commit authors' name that triggered the build.
 
   - section_subtitle: $GIT_CLONE_COMMIT_MESSAGE_SUBJECT
     opts:
       category: "MessageCard Content"
       title: "Section Subtitle"
       subtitle: "Text that is displayed within the MessageCard Section `activitySubtitle`"
+      description: |
+        Sets the text value of `activitySubtitle` within the primary Section of the MessageCard.
+
+        By default, this will be set to the commit message subject that triggered the build.
 
   - section_text: $GIT_CLONE_COMMIT_MESSAGE_BODY
     opts:
       category: "MessageCard Content"
       title: "Section Text"
       subtitle: "Text that is displayed within the MessageCard Section `text`"
+      description: |
+        Sets the text value of `text` within the primary Section of the MessageCard. By default,
+        this will be set to the commit message body that triggered the build.
+
+        If desired, this is the perfect place to include release notes via the `generate-changelog` Bitrise step, however
+        setting `enable_primary_section_markdown` to `true` may be necessary to properly format the changelog content.
 
   - section_header_image:
     opts:

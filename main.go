@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/bitrise-tools/go-steputils/stepconf"
 )
@@ -38,11 +39,37 @@ func newMessage(cfg config) Message {
 	)
 	message.Title = optionalUserValue(cfg.AppTitle, cfg.CardTitle)
 	message.Summary = buildStatusValue(
-		fmt.Sprintf("%s build #%s succeeded", cfg.AppTitle, cfg.BuildNumber),
-		fmt.Sprintf("%s build #%s failed", cfg.AppTitle, cfg.BuildNumber),
+		fmt.Sprintf("%s #%s succeeded", cfg.AppTitle, cfg.BuildNumber),
+		fmt.Sprintf("%s #%s failed", cfg.AppTitle, cfg.BuildNumber),
 	)
-	message.Markdown = strconv.FormatBool(cfg.EnableMarkdown)
 
+	// MessageCard sections
+	primarySection := buildPrimarySection(cfg)
+	factsSection := buildFactsSection(cfg)
+	message.Sections = []Section{primarySection, factsSection}
+
+	// MessageCard Actions
+	goToRepoAction := buildUriButton("Go To Repo", cfg.RepoURL)
+	goToBuildAction := buildUriButton("Go To Build", cfg.BuildURL)
+	message.Actions = []OpenUriAction{goToRepoAction, goToBuildAction}
+
+	return message
+}
+
+// Builds the primary section of the MessageCard content
+func buildPrimarySection(cfg config) Section {
+	section := Section{}
+	section.ActivityTitle = cfg.SectionTitle
+	section.ActivitySubtitle = cfg.SectionSubtitle
+	section.Text = cfg.SectionText
+	// TODO: fix AppImageURL
+	section.ActivityImage = cfg.AppImageURL
+	section.Markdown = cfg.EnablePrimarySectionMarkdown
+	return section
+}
+
+// Builds a Section containing a list of Fact related to build status
+func buildFactsSection(cfg config) Section {
 	buildStatusFact := Fact{
 		Name: "Build Status",
 		Value: buildStatusValue(
@@ -61,9 +88,14 @@ func newMessage(cfg config) Message {
 		Value: cfg.GitBranch,
 	}
 
+	i, err := strconv.ParseInt(cfg.BuildTime, 10, 64)
+	if err != nil {
+		_ = fmt.Errorf("failed to parse the given build time: %s", err)
+	}
+	parsedTime := time.Unix(i, 0)
 	buildTimeFact := Fact{
 		Name:  "Build Triggered",
-		Value: cfg.BuildTime,
+		Value: parsedTime.Format(time.RFC1123),
 	}
 
 	workflowFact := Fact{
@@ -71,26 +103,10 @@ func newMessage(cfg config) Message {
 		Value: cfg.Workflow,
 	}
 
-	section := buildSection(cfg, []Fact{buildStatusFact, buildNumberFact, buildBranchFact, buildTimeFact, workflowFact})
-
-	message.Sections = []Section{section}
-
-	goToRepoAction := buildUriButton("Go To Repo", cfg.RepoURL)
-	goToBuildAction := buildUriButton("Go To Build", cfg.BuildURL)
-
-	message.Actions = []OpenUriAction{goToRepoAction, goToBuildAction}
-
-	return message
-}
-
-func buildSection(cfg config, facts []Fact) Section {
-	section := Section{}
-	section.ActivityTitle = cfg.SectionTitle
-	section.ActivitySubtitle = cfg.SectionSubtitle
-	section.Text = cfg.SectionText
-	section.ActivityImage = cfg.AppImageURL
-	section.Facts = facts
-	return section
+	return Section{
+		Markdown: cfg.EnableBuildFactsMarkdown,
+		Facts:    []Fact{buildStatusFact, buildNumberFact, buildBranchFact, buildTimeFact, workflowFact},
+	}
 }
 
 func buildUriButton(buttonText string, uri string) OpenUriAction {

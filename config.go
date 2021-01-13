@@ -18,14 +18,15 @@ type config struct {
 	WebhookURL string `env:"webhook_url,required"`
 
 	// Optional user inputs
-	CardTitle          string `env:"card_title"`
-	SuccessThemeColor  string `env:"success_theme_color"`
-	FailedThemeColor   string `env:"failed_theme_color"`
-	SectionTitle       string `env:"section_title"`
-	SectionSubtitle    string `env:"section_subtitle"`
-	SectionText        string `env:"section_text"`
-	SectionHeaderImage string `env:"section_header_image"`
-	EnableMarkdown     bool   `env:"enable_markdown"`
-	EnableDebug        bool   `env:"enable_debug"`
-	RepoURL            string `env:"repository_url"`
+	CardTitle                    string `env:"card_title"`
+	SuccessThemeColor            string `env:"success_theme_color"`
+	FailedThemeColor             string `env:"failed_theme_color"`
+	SectionTitle                 string `env:"section_title"`
+	SectionSubtitle              string `env:"section_subtitle"`
+	SectionText                  string `env:"section_text"`
+	SectionHeaderImage           string `env:"section_header_image"`
+	EnablePrimarySectionMarkdown bool   `env:"enable_primary_section_markdown"`
+	EnableBuildFactsMarkdown     bool   `env:"enable_build_status_facts_markdown"`
+	EnableDebug                  bool   `env:"enable_debug"`
+	RepoURL                      string `env:"repository_url"`
 }
