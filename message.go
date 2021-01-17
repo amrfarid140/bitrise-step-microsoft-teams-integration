@@ -5,21 +5,28 @@ type Message struct {
 	Type       string          `json:"@type"`
 	Context    string          `json:"@context"`
 	ThemeColor string          `json:"themeColor"`
+	Title      string          `json:"title"`
 	Summary    string          `json:"summary"`
-	Markdown   string          `json:"markdown"`
 	Sections   []Section       `json:"sections"`
 	Actions    []OpenUriAction `json:"potentialAction"`
 }
 
 // Section to be shown in the message
 type Section struct {
-	AppTitle    string `json:"activityTitle"`
-	BuildNumber string `json:"activitySubtitle"`
-	AppImage    string `json:"activityImage"`
-	Facts       []Fact `json:"facts"`
+	ActivityTitle    string    `json:"activityTitle"`
+	ActivitySubtitle string    `json:"activitySubtitle"`
+	ActivityImage    string    `json:"activityImage"`
+	Facts            []Fact    `json:"facts"`
+	Markdown         bool      `json:"markdown"`
+	Text             string    `json:"text"`
+	HeroImage        HeroImage `json:"heroImage"`
 }
 
-// Fact realted to the message
+type HeroImage struct {
+	Image string `json:"image"`
+}
+
+// Fact related to the message
 type Fact struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
