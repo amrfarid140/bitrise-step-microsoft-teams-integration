@@ -92,7 +92,8 @@ func buildFactsSection(cfg config) Section {
 	if err != nil {
 		_ = fmt.Errorf("failed to parse the given build time: %s", err)
 	}
-	parsedTime := time.Unix(i, 0)
+	// Force UTC, as it otherwise defaults to locale of executing system
+	parsedTime := time.Unix(i, 0).In(time.UTC)
 	buildTimeFact := Fact{
 		Name:  "Build Triggered",
 		Value: parsedTime.Format(time.RFC1123),
