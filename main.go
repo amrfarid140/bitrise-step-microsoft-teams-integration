@@ -15,7 +15,7 @@ import (
 
 var buildSucceeded = os.Getenv("BITRISE_BUILD_STATUS") == "0"
 
-func buildStatusValue(ifSuccess, ifFailed string) string {
+func getValueForBuildStatus(ifSuccess, ifFailed string, buildSucceeded bool) string {
 	if buildSucceeded || ifFailed == "" {
 		return ifSuccess
 	}
@@ -29,23 +29,25 @@ func optionalUserValue(defaultValue, userValue string) string {
 	return userValue
 }
 
-func newMessage(cfg config) Message {
+func newMessage(cfg config, buildSuccessful bool) Message {
 	message := Message{}
 	message.Type = "MessageCard"
 	message.Context = "http://schema.org/extensions"
-	message.ThemeColor = buildStatusValue(
+	message.ThemeColor = getValueForBuildStatus(
 		cfg.SuccessThemeColor,
 		cfg.FailedThemeColor,
+		buildSuccessful,
 	)
 	message.Title = optionalUserValue(cfg.AppTitle, cfg.CardTitle)
-	message.Summary = buildStatusValue(
+	message.Summary = getValueForBuildStatus(
 		fmt.Sprintf("%s #%s succeeded", cfg.AppTitle, cfg.BuildNumber),
 		fmt.Sprintf("%s #%s failed", cfg.AppTitle, cfg.BuildNumber),
+		buildSuccessful,
 	)
 
 	// MessageCard sections
 	primarySection := buildPrimarySection(cfg)
-	factsSection := buildFactsSection(cfg)
+	factsSection := buildFactsSection(cfg, buildSuccessful)
 	message.Sections = []Section{primarySection, factsSection}
 
 	// MessageCard Actions
@@ -69,12 +71,13 @@ func buildPrimarySection(cfg config) Section {
 }
 
 // Builds a Section containing a list of Fact related to build status
-func buildFactsSection(cfg config) Section {
+func buildFactsSection(cfg config, buildSuccessful bool) Section {
 	buildStatusFact := Fact{
 		Name: "Build Status",
-		Value: buildStatusValue(
+		Value: getValueForBuildStatus(
 			fmt.Sprintf(`<span style="color:#%s">Success</span>`, cfg.SuccessThemeColor),
 			fmt.Sprintf(`<span style="color:#%s">Fail</span>`, cfg.FailedThemeColor),
+			buildSuccessful,
 		),
 	}
 
@@ -130,7 +133,7 @@ func postMessage(webhookURL string, msg Message, debugEnabled bool) error {
 	}
 	fmt.Println(fmt.Sprintf("Request to Microsoft Teams: %s", webhookURL))
 	if debugEnabled {
-		fmt.Println(fmt.Sprintf("JSON body: %s", b))
+		fmt.Println(fmt.Sprintf("JSON body: %s\n", b))
 	}
 
 	resp, err := http.Post(webhookURL, "application/json", bytes.NewReader(b))
@@ -162,7 +165,7 @@ func main() {
 	}
 	stepconf.Print(cfg)
 
-	message := newMessage(cfg)
+	message := newMessage(cfg, buildSucceeded)
 	if err := postMessage(cfg.WebhookURL, message, cfg.EnableDebug); err != nil {
 		fmt.Println(fmt.Sprintf("Error: %s", err))
 		os.Exit(1)
