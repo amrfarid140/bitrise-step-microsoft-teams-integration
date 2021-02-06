@@ -51,9 +51,31 @@ func newMessage(cfg config, buildSuccessful bool) Message {
 	message.Sections = []Section{primarySection, factsSection}
 
 	// MessageCard Actions
-	goToRepoAction := buildUriButton("Go To Repo", cfg.RepoURL)
-	goToBuildAction := buildUriButton("Go To Build", cfg.BuildURL)
-	message.Actions = []OpenUriAction{goToRepoAction, goToBuildAction}
+	actions := []OpenURIAction{}
+	if cfg.EnableDefaultActions {
+		goToRepoAction := buildURIAction(Action{
+			Text: "Go To Repo",
+			Targets: []ActionTarget{
+				{
+					URI: cfg.RepoURL,
+				},
+			},
+		})
+		goToBuildAction := buildURIAction(Action{
+			Text: "Go To Build",
+			Targets: []ActionTarget{
+				{
+					URI: cfg.BuildURL,
+				},
+			},
+		})
+		actions = append(actions, goToRepoAction, goToBuildAction)
+	}
+	customActions := parseActions(cfg.Actions)
+	for _, action := range customActions {
+		actions = append(actions, buildURIAction(action))
+	}
+	message.Actions = actions
 
 	return message
 }
@@ -113,21 +135,25 @@ func buildFactsSection(cfg config, buildSuccessful bool) Section {
 	}
 }
 
-func buildUriButton(buttonText string, uri string) OpenUriAction {
-	uriAction := OpenUriAction{}
+func buildURIAction(action Action) OpenURIAction {
+	uriAction := OpenURIAction{}
 	uriAction.Type = "OpenUri"
-	uriAction.Name = buttonText
-	uriTarget := Target{}
-	uriTarget.OS = "default"
-	uriTarget.Uri = uri
-	uriAction.Targets = []Target{uriTarget}
+	uriAction.Name = action.Text
+	targets := []Target{}
+	for _, target := range action.Targets {
+		uriTarget := Target{}
+		uriTarget.OS = optionalUserValue("default", target.OS)
+		uriTarget.URI = target.URI
+		targets = append(targets, uriTarget)
+	}
+	uriAction.Targets = targets
 
 	return uriAction
 }
 
 // postMessage sends a message to a channel.
 func postMessage(webhookURL string, msg Message, debugEnabled bool) error {
-	b, err := json.Marshal(msg)
+	b, err := json.MarshalIndent(msg, "", "  ")
 	if err != nil {
 		return err
 	}

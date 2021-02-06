@@ -8,7 +8,7 @@ type Message struct {
 	Title      string          `json:"title"`
 	Summary    string          `json:"summary"`
 	Sections   []Section       `json:"sections"`
-	Actions    []OpenUriAction `json:"potentialAction"`
+	Actions    []OpenURIAction `json:"potentialAction"`
 }
 
 // Section to be shown in the message
@@ -22,6 +22,7 @@ type Section struct {
 	HeroImage        HeroImage `json:"heroImage"`
 }
 
+// HeroImage that is displayed within the Message
 type HeroImage struct {
 	Image string `json:"image"`
 }
@@ -32,15 +33,15 @@ type Fact struct {
 	Value string `json:"value"`
 }
 
-// OpenUri action for link buttons
-type OpenUriAction struct {
+// OpenURIAction action for link buttons
+type OpenURIAction struct {
 	Type    string   `json:"@type"`
 	Name    string   `json:"name"`
 	Targets []Target `json:"targets"`
 }
 
-// The required Target object that resides inside `OpenUriAction`s
+// Target object that resides inside `OpenUriAction`s
 type Target struct {
 	OS  string `json:"os"`
-	Uri string `json:"uri"`
+	URI string `json:"uri"`
 }
