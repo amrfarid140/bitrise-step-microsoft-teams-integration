@@ -29,8 +29,28 @@ var mockConfig = config{
 	SectionHeaderImage:           "",
 	EnablePrimarySectionMarkdown: false,
 	EnableBuildFactsMarkdown:     false,
+	EnableDefaultActions:         true,
 	EnableDebug:                  false,
 	RepoURL:                      "https://www.github.com/username/repo",
+	Actions: `[
+		{
+			"text": "Some text",
+			"targets": [
+				{
+					"uri": "www.google.com", 
+					"os": "android"
+				},
+				{
+					"uri": "www.google.com", 
+					"os": "iOS"
+				},
+				{
+					"uri": "www.google.com", 
+					"os": "windows"
+				}
+			]
+		}
+	]`,
 }
 
 func TestGetValueForBuildStatus(t *testing.T) {
@@ -239,14 +259,14 @@ func TestNewMessage(t *testing.T) {
 		Summary:    fmt.Sprintf("%v #%v succeeded", mockConfig.AppTitle, mockConfig.BuildNumber),
 		// Be mindful of list order
 		Sections: []Section{primarySection, buildSuccessFacts},
-		Actions: []OpenUriAction{
+		Actions: []OpenURIAction{
 			{
 				Type: "OpenUri",
 				Name: "Go To Repo",
 				Targets: []Target{
 					{
 						OS:  "default",
-						Uri: mockConfig.RepoURL,
+						URI: mockConfig.RepoURL,
 					},
 				},
 			},
@@ -256,7 +276,25 @@ func TestNewMessage(t *testing.T) {
 				Targets: []Target{
 					{
 						OS:  "default",
-						Uri: mockConfig.BuildURL,
+						URI: mockConfig.BuildURL,
+					},
+				},
+			},
+			{
+				Type: "OpenUri",
+				Name: "Some text",
+				Targets: []Target{
+					{
+						URI: "www.google.com",
+						OS:  "android",
+					},
+					{
+						URI: "www.google.com",
+						OS:  "iOS",
+					},
+					{
+						URI: "www.google.com",
+						OS:  "windows",
 					},
 				},
 			},
@@ -271,14 +309,14 @@ func TestNewMessage(t *testing.T) {
 		Summary:    fmt.Sprintf("%v #%v failed", mockConfig.AppTitle, mockConfig.BuildNumber),
 		// Be mindful of list order
 		Sections: []Section{primarySection, buildFailedFacts},
-		Actions: []OpenUriAction{
+		Actions: []OpenURIAction{
 			{
 				Type: "OpenUri",
 				Name: "Go To Repo",
 				Targets: []Target{
 					{
 						OS:  "default",
-						Uri: mockConfig.RepoURL,
+						URI: mockConfig.RepoURL,
 					},
 				},
 			},
@@ -288,7 +326,25 @@ func TestNewMessage(t *testing.T) {
 				Targets: []Target{
 					{
 						OS:  "default",
-						Uri: mockConfig.BuildURL,
+						URI: mockConfig.BuildURL,
+					},
+				},
+			},
+			{
+				Type: "OpenUri",
+				Name: "Some text",
+				Targets: []Target{
+					{
+						URI: "www.google.com",
+						OS:  "android",
+					},
+					{
+						URI: "www.google.com",
+						OS:  "iOS",
+					},
+					{
+						URI: "www.google.com",
+						OS:  "windows",
 					},
 				},
 			},
@@ -317,4 +373,83 @@ func TestNewMessage(t *testing.T) {
 		}
 	}
 
+}
+
+func TestBuildURIAction(t *testing.T) {
+	var tests = []struct {
+		input    Action
+		expected OpenURIAction
+	}{
+		{
+			input: Action{
+				Text: "Action 1",
+				Targets: []ActionTarget{
+					{
+						URI: "https://www.google.com",
+					},
+				},
+			},
+			expected: OpenURIAction{
+				Type: "OpenUri",
+				Name: "Action 1",
+				Targets: []Target{
+					{
+						OS:  "default",
+						URI: "https://www.google.com",
+					},
+				},
+			},
+		},
+		{
+			input: Action{
+				Text: "Action 2",
+				Targets: []ActionTarget{
+					{
+						URI: "https://www.google.com",
+						OS:  "iOS",
+					},
+					{
+						URI: "https://www.google.com",
+						OS:  "android",
+					},
+					{
+						URI: "https://www.google.com",
+						OS:  "windows",
+					},
+					{
+						URI: "https://www.google.com",
+						OS:  "default",
+					},
+				},
+			},
+			expected: OpenURIAction{
+				Type: "OpenUri",
+				Name: "Action 2",
+				Targets: []Target{
+					{
+						OS:  "iOS",
+						URI: "https://www.google.com",
+					},
+					{
+						OS:  "android",
+						URI: "https://www.google.com",
+					},
+					{
+						OS:  "windows",
+						URI: "https://www.google.com",
+					},
+					{
+						OS:  "default",
+						URI: "https://www.google.com",
+					},
+				},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		if output := buildURIAction(test.input); !reflect.DeepEqual(output, test.expected) {
+			t.Errorf("Test failed: config input was %v, expected %v", test.input, test.expected)
+		}
+	}
 }
