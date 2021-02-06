@@ -27,6 +27,8 @@ type config struct {
 	SectionHeaderImage           string `env:"section_header_image"`
 	EnablePrimarySectionMarkdown bool   `env:"enable_primary_section_markdown"`
 	EnableBuildFactsMarkdown     bool   `env:"enable_build_status_facts_markdown"`
+	EnableDefaultActions         bool   `env:"enable_default_actions"`
 	EnableDebug                  bool   `env:"enable_debug"`
 	RepoURL                      string `env:"repository_url"`
+	Actions                      string `env:"actions"`
 }

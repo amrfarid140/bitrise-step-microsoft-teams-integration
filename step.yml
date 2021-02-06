@@ -128,6 +128,58 @@ inputs:
       title: "Section Image"
       summary: "Image that is displayed within the MessageCard Section `activityImage`"
 
+  - enable_default_actions: true
+    opts:
+      category: "MessageCard Actions"
+      title: "Default MessageCard Actions"
+      summary: "Toggles the default actions within the MessageCard."
+      description: |
+        Allows for disabling the default 'Go To Repo' and 'Go To Build' MessageCard Actions if you wish to provide only your own custom actions 
+        via the `actions` step input.
+
+  - actions:
+    opts:
+      category: "MessageCard Actions"
+      title: "MessageCard Actions"
+      summary: "Additional extra custom actions to display on the MessageCard"
+      description: |
+        A stringified JSON object array of additional custom actions to display on the card.
+
+        Each action button object must have a `text` key/value pair, and a list of `target` objects
+        which define the `uri`, specific to which platform-client (`os` value) the Teams message is viewed on.
+
+        Valid `os` values are (case-sensitive):
+
+        * iOS
+        * android
+        * windows
+        * default (shows action button on every Teams client, regardless of platform)
+
+        NOTE: Step input must be valid JSON. Trailing commas are not permitted.
+
+        Example input:
+        ```json
+        [
+          {
+            "text": "Open deep link", 
+            "targets": [
+              {
+                "uri": "<your_universal_link>",
+                "os": "iOS"
+              },
+              {
+                "uri": "<your_android_app_link",
+                "os": "android"
+              },
+              {
+                "uri": "https://www.google.com",
+                "os": "default"
+              }
+            ]
+          }                  
+        ]
+        ```
+
   - repository_url: $GIT_REPOSITORY_URL
     opts:
       title: "Repository URL"
