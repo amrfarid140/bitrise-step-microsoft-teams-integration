@@ -24,10 +24,10 @@ toolkit:
   go:
     package_name: github.com/amrfarid140/bitrise-step-microsoft-teams-integration
 inputs:
-  - card_title:
+  - card_title: $BITRISE_APP_TITLE
     opts:
       title: "Card Title"
-      subtitle: "The heading text at the top of the MessageCard"
+      summary: "The heading text at the top of the MessageCard"
       description: |
         Primary MessageCard title text.
 
@@ -36,7 +36,7 @@ inputs:
   - enable_debug: false
     opts:
       title: "Enable debug logging"
-      subtitle: "Toggles whether to log debug info to the build output"
+      summary: "Toggles whether to log debug info to the build output"
       description: |
         Enables debug logging to the Bitrise console.
 
@@ -46,7 +46,7 @@ inputs:
     opts:
       category: "Theme Customisation"
       title: "Theme Color - Build Success"
-      subtitle: "Sets the cards theme color to the given hex value for successful builds"
+      summary: "Sets the cards theme color to the given hex value for successful builds"
       description: |
         Given value should be a hexadecimal color, minus the leading `#`.
 
@@ -56,7 +56,7 @@ inputs:
     opts:
       category: "Theme Customisation"
       title: "Theme Color - Build Failed"
-      subtitle: "Sets the cards theme color to the given hex value for failed builds"
+      summary: "Sets the cards theme color to the given hex value for failed builds"
       description: |
         Given value should be a hexadecimal color, minus the leading `#`.
 
@@ -66,7 +66,7 @@ inputs:
     opts:
       category: "Markdown Rules"
       title: "Primary Section Markdown"
-      subtitle: "Sets whether the text fields within the MessageCard's first section should render Markdown text"
+      summary: "Sets whether the text fields within the MessageCard's first section should render Markdown text"
       description: |
         Sets whether to enable Markdown rendering for the each field of the first section of the MessageCard.
 
@@ -79,7 +79,7 @@ inputs:
     opts:
       category: "Markdown Rules"
       title: "Build Status Facts Markdown"
-      subtitle: "Sets whether each of the facts should render their values as Markdown text"
+      summary: "Sets whether each of the facts should render their values as Markdown text"
       description: |
         Sets whether to enable Markdown rendering for the default Facts within the MessageCard.
 
@@ -94,7 +94,7 @@ inputs:
     opts:
       category: "MessageCard Content"
       title: "Section Title"
-      subtitle: "Text that is displayed within the MessageCard Section `activityTitle`"
+      summary: "Text that is displayed within the MessageCard Section `activityTitle`"
       description: |
         Sets the text value of `activityTitle` within the primary Section of the MessageCard.
 
@@ -104,7 +104,7 @@ inputs:
     opts:
       category: "MessageCard Content"
       title: "Section Subtitle"
-      subtitle: "Text that is displayed within the MessageCard Section `activitySubtitle`"
+      summary: "Text that is displayed within the MessageCard Section `activitySubtitle`"
       description: |
         Sets the text value of `activitySubtitle` within the primary Section of the MessageCard.
 
@@ -114,7 +114,7 @@ inputs:
     opts:
       category: "MessageCard Content"
       title: "Section Text"
-      subtitle: "Text that is displayed within the MessageCard Section `text`"
+      summary: "Text that is displayed within the MessageCard Section `text`"
       description: |
         Sets the text value of `text` within the primary Section of the MessageCard. By default,
         this will be set to the commit message body that triggered the build.
@@ -126,12 +126,12 @@ inputs:
     opts:
       category: "MessageCard Content"
       title: "Section Image"
-      subtitle: "Image that is displayed within the MessageCard Section `activityImage`"
+      summary: "Image that is displayed within the MessageCard Section `activityImage`"
 
   - repository_url: $GIT_REPOSITORY_URL
     opts:
       title: "Repository URL"
-      subtitle: "Defines a custom repository location"
+      summary: "Define a custom repository location"
       description: |
         If no value is given, the step automatically uses the `$GIT_REPOSITORY_URL` var.
 
