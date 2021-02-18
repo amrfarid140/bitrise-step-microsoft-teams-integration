@@ -1,3 +1,10 @@
+## [1.2.2] - 18th Feb 2021
+
+* Clean up Gopkg.* files, no longer required since migrating to Go Modules
+* Remove deprecated bitrise-tools dependency in favour of bitrise-io
+* Removed unnecessary Go brew deps from `step.yml`
+	* Only go toolkit is required
+
 ## [1.2.1] - 6th Feb 2021
 
 * fix summaries within `step.yml`
