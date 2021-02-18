@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/bitrise-tools/go-steputils/stepconf"
+	"github.com/bitrise-io/go-steputils/stepconf"
 )
 
 var buildSucceeded = os.Getenv("BITRISE_BUILD_STATUS") == "0"
