@@ -29,6 +29,10 @@ func optionalUserValue(defaultValue, userValue string) string {
 	return userValue
 }
 
+func valueOptionToBool(userValue string) bool {
+	return userValue == "yes"
+}
+
 func newMessage(cfg config, buildSuccessful bool) Message {
 	message := Message{}
 	message.Type = "MessageCard"
@@ -52,7 +56,7 @@ func newMessage(cfg config, buildSuccessful bool) Message {
 
 	// MessageCard Actions
 	actions := []OpenURIAction{}
-	if cfg.EnableDefaultActions {
+	if valueOptionToBool(cfg.EnableDefaultActions) {
 		goToRepoAction := buildURIAction(Action{
 			Text: "Go To Repo",
 			Targets: []ActionTarget{
@@ -87,7 +91,7 @@ func buildPrimarySection(cfg config) Section {
 	section.ActivitySubtitle = cfg.SectionSubtitle
 	section.Text = cfg.SectionText
 	section.ActivityImage = cfg.SectionHeaderImage
-	section.Markdown = cfg.EnablePrimarySectionMarkdown
+	section.Markdown = valueOptionToBool(cfg.EnablePrimarySectionMarkdown)
 	return section
 }
 
@@ -129,7 +133,7 @@ func buildFactsSection(cfg config, buildSuccessful bool) Section {
 	}
 
 	return Section{
-		Markdown: cfg.EnableBuildFactsMarkdown,
+		Markdown: valueOptionToBool(cfg.EnableBuildFactsMarkdown),
 		Facts:    []Fact{buildStatusFact, buildNumberFact, buildBranchFact, buildTimeFact, workflowFact},
 	}
 }
@@ -191,7 +195,7 @@ func main() {
 	stepconf.Print(cfg)
 
 	message := newMessage(cfg, buildSucceeded)
-	if err := postMessage(cfg.WebhookURL, message, cfg.EnableDebug); err != nil {
+	if err := postMessage(cfg.WebhookURL, message, valueOptionToBool(cfg.EnableDebug)); err != nil {
 		fmt.Println(fmt.Sprintf("Error: %s", err))
 		os.Exit(1)
 	}
