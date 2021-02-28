@@ -26,10 +26,10 @@ var mockConfig = config{
 	SectionSubtitle:              "Commit message",
 	SectionText:                  "Commit message body",
 	SectionHeaderImage:           "",
-	EnablePrimarySectionMarkdown: false,
-	EnableBuildFactsMarkdown:     false,
-	EnableDefaultActions:         true,
-	EnableDebug:                  false,
+	EnablePrimarySectionMarkdown: "no",
+	EnableBuildFactsMarkdown:     "no",
+	EnableDefaultActions:         "yes",
+	EnableDebug:                  "no",
 	RepoURL:                      "https://www.github.com/username/repo",
 	Actions: `[
 		{
@@ -86,7 +86,7 @@ func TestBuildPrimarySection(t *testing.T) {
 		SectionTitle:                 "Some author",
 		SectionSubtitle:              "A commit message",
 		SectionText:                  "The commits message body",
-		EnablePrimarySectionMarkdown: false,
+		EnablePrimarySectionMarkdown: "no",
 	}
 	var tests = []struct {
 		input    config
@@ -98,7 +98,7 @@ func TestBuildPrimarySection(t *testing.T) {
 				ActivityTitle:    defaultValuesConfig.SectionTitle,
 				ActivitySubtitle: defaultValuesConfig.SectionSubtitle,
 				Text:             defaultValuesConfig.SectionText,
-				Markdown:         defaultValuesConfig.EnablePrimarySectionMarkdown,
+				Markdown:         valueOptionToBool(defaultValuesConfig.EnablePrimarySectionMarkdown),
 			},
 		},
 	}
@@ -122,7 +122,7 @@ func TestBuildFactsSection(t *testing.T) {
 			mockConfig,
 			true,
 			Section{
-				Markdown: mockConfig.EnableBuildFactsMarkdown,
+				Markdown: valueOptionToBool(mockConfig.EnableBuildFactsMarkdown),
 				Facts: []Fact{
 					{
 						Name:  "Build Status",
@@ -152,7 +152,7 @@ func TestBuildFactsSection(t *testing.T) {
 			mockConfig,
 			false,
 			Section{
-				Markdown: mockConfig.EnableBuildFactsMarkdown,
+				Markdown: valueOptionToBool(mockConfig.EnableBuildFactsMarkdown),
 				Facts: []Fact{
 					{
 						Name:  "Build Status",
@@ -210,7 +210,7 @@ func TestNewMessage(t *testing.T) {
 				Value: mockConfig.Workflow,
 			},
 		},
-		Markdown:  mockConfig.EnableBuildFactsMarkdown,
+		Markdown:  valueOptionToBool(mockConfig.EnableBuildFactsMarkdown),
 		HeroImage: HeroImage{},
 	}
 
@@ -237,7 +237,7 @@ func TestNewMessage(t *testing.T) {
 				Value: mockConfig.Workflow,
 			},
 		},
-		Markdown:  mockConfig.EnableBuildFactsMarkdown,
+		Markdown:  valueOptionToBool(mockConfig.EnableBuildFactsMarkdown),
 		HeroImage: HeroImage{},
 	}
 
@@ -245,7 +245,7 @@ func TestNewMessage(t *testing.T) {
 		ActivityTitle:    mockConfig.SectionTitle,
 		ActivitySubtitle: mockConfig.SectionSubtitle,
 		ActivityImage:    mockConfig.SectionHeaderImage,
-		Markdown:         mockConfig.EnablePrimarySectionMarkdown,
+		Markdown:         valueOptionToBool(mockConfig.EnablePrimarySectionMarkdown),
 		Text:             mockConfig.SectionText,
 		HeroImage:        HeroImage{},
 	}

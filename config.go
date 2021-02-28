@@ -24,10 +24,10 @@ type config struct {
 	SectionSubtitle              string `env:"section_subtitle"`
 	SectionText                  string `env:"section_text"`
 	SectionHeaderImage           string `env:"section_header_image"`
-	EnablePrimarySectionMarkdown bool   `env:"enable_primary_section_markdown"`
-	EnableBuildFactsMarkdown     bool   `env:"enable_build_status_facts_markdown"`
-	EnableDefaultActions         bool   `env:"enable_default_actions"`
-	EnableDebug                  bool   `env:"enable_debug"`
+	EnablePrimarySectionMarkdown string `env:"enable_primary_section_markdown"`
+	EnableBuildFactsMarkdown     string `env:"enable_build_status_facts_markdown"`
+	EnableDefaultActions         string `env:"enable_default_actions"`
+	EnableDebug                  string `env:"enable_debug"`
 	RepoURL                      string `env:"repository_url"`
 	Actions                      string `env:"actions"`
 }

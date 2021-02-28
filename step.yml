@@ -1,6 +1,6 @@
 ---
 title: Microsoft Teams Integration
-summary: Allows you to recieve build status updates on Microsoft Team using Incoming Webhooks
+summary: Allows you to receive build status updates on Microsoft Team using Incoming Webhooks
 description: |
   Uses Incoming Webhooks feature in Microsft Teams to send updates on your builds
 website: https://github.com/amrfarid140/bitrise-step-microsoft-teams-integration
@@ -29,7 +29,7 @@ inputs:
 
         If no value is given, the default value will be the `BITRISE_APP_TITLE`.
 
-  - enable_debug: false
+  - enable_debug: "no"
     opts:
       title: "Enable debug logging"
       summary: "Toggles whether to log debug info to the build output"
@@ -37,6 +37,9 @@ inputs:
         Enables debug logging to the Bitrise console.
 
         WARNING: This will output the JSON value of the Teams Webhook body, be mindful of what is output here.
+      value_options:
+        - "yes"
+        - "no"
 
   - success_theme_color: 359914
     opts:
@@ -58,7 +61,7 @@ inputs:
 
         Defaults to `E04504` if not overridden.
 
-  - enable_primary_section_markdown: true
+  - enable_primary_section_markdown: "yes"
     opts:
       category: "Markdown Rules"
       title: "Primary Section Markdown"
@@ -70,8 +73,11 @@ inputs:
         * section_title
         * section_subtitle
         * section_text
+      value_options:
+        - "yes"
+        - "no"
 
-  - enable_build_status_facts_markdown: false
+  - enable_build_status_facts_markdown: "no"
     opts:
       category: "Markdown Rules"
       title: "Build Status Facts Markdown"
@@ -85,6 +91,9 @@ inputs:
         * Git Branch
         * Build Triggered
         * Workflow
+      value_options:
+        - "yes"
+        - "no"
 
   - section_title: $GIT_CLONE_COMMIT_AUTHOR_NAME
     opts:
@@ -116,7 +125,7 @@ inputs:
         this will be set to the commit message body that triggered the build.
 
         If desired, this is the perfect place to include release notes via the `generate-changelog` Bitrise step, however
-        setting `enable_primary_section_markdown` to `true` may be necessary to properly format the changelog content.
+        setting `enable_primary_section_markdown` to `yes` may be necessary to properly format the changelog content.
 
   - section_header_image:
     opts:
@@ -124,7 +133,7 @@ inputs:
       title: "Section Image"
       summary: "Image that is displayed within the MessageCard Section `activityImage`"
 
-  - enable_default_actions: true
+  - enable_default_actions: "yes"
     opts:
       category: "MessageCard Actions"
       title: "Default MessageCard Actions"
@@ -132,6 +141,9 @@ inputs:
       description: |
         Allows for disabling the default 'Go To Repo' and 'Go To Build' MessageCard Actions if you wish to provide only your own custom actions 
         via the `actions` step input (up to a limit of 4 actions in total).
+      value_options:
+        - "yes"
+        - "no"
 
   - actions: "[]"
     opts:
@@ -142,7 +154,7 @@ inputs:
         A stringified JSON object array of additional custom actions to display on the card.
 
         The maximum amount of actions a single card can display is 4, 2 of which are used if 
-        `enable_default_actions` is set to `true`.
+        `enable_default_actions` is set to `yes`.
 
         Each action button object must have a `text` key/value pair, and a list of `target` objects
         which define the `uri`, specific to which platform-client (`os` value) the Teams message is viewed on.
