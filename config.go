@@ -11,7 +11,6 @@ type config struct {
 	BuildTime         string `env:"BITRISE_BUILD_TRIGGER_TIMESTAMP"`
 	CommitMessageBody string `env:"GIT_CLONE_COMMIT_MESSAGE_BODY"`
 	GitBranch         string `env:"BITRISE_GIT_BRANCH"`
-	AppImageURL       string `env:"BITRISE_APP_SLUG"`
 	Workflow          string `env:"BITRISE_TRIGGERED_WORKFLOW_TITLE"`
 
 	// Required user inputs

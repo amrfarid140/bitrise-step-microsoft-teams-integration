@@ -86,8 +86,7 @@ func buildPrimarySection(cfg config) Section {
 	section.ActivityTitle = cfg.SectionTitle
 	section.ActivitySubtitle = cfg.SectionSubtitle
 	section.Text = cfg.SectionText
-	// TODO: fix AppImageURL
-	section.ActivityImage = cfg.AppImageURL
+	section.ActivityImage = cfg.SectionHeaderImage
 	section.Markdown = cfg.EnablePrimarySectionMarkdown
 	return section
 }

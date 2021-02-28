@@ -17,7 +17,6 @@ var mockConfig = config{
 	BuildTime:                    unixTimeString,
 	CommitMessageBody:            "Some commit message body",
 	GitBranch:                    "master",
-	AppImageURL:                  "",
 	Workflow:                     "master_branch",
 	WebhookURL:                   "https://microsoft.com/some/webhook",
 	CardTitle:                    "The heading for the card",
