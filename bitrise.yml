@@ -14,6 +14,10 @@ app:
 workflows:
   test:
     steps:
+      - go-list: {}
+      - golint: {}
+      - errcheck: {}
+      - go-test: {}
       - path::./:
           title: Step Test
           run_if: "true"
