@@ -131,15 +131,18 @@ inputs:
       summary: "Toggles the default actions within the MessageCard."
       description: |
         Allows for disabling the default 'Go To Repo' and 'Go To Build' MessageCard Actions if you wish to provide only your own custom actions 
-        via the `actions` step input.
+        via the `actions` step input (up to a limit of 4 actions in total).
 
-  - actions:
+  - actions: "[]"
     opts:
       category: "MessageCard Actions"
       title: "MessageCard Actions"
       summary: "Additional extra custom actions to display on the MessageCard"
       description: |
         A stringified JSON object array of additional custom actions to display on the card.
+
+        The maximum amount of actions a single card can display is 4, 2 of which are used if 
+        `enable_default_actions` is set to `true`.
 
         Each action button object must have a `text` key/value pair, and a list of `target` objects
         which define the `uri`, specific to which platform-client (`os` value) the Teams message is viewed on.
@@ -160,11 +163,11 @@ inputs:
             "text": "Open deep link", 
             "targets": [
               {
-                "uri": "<your_universal_link>",
+                "uri": "your_universal_link",
                 "os": "iOS"
               },
               {
-                "uri": "<your_android_app_link",
+                "uri": "your_android_app_link",
                 "os": "android"
               },
               {
@@ -175,6 +178,9 @@ inputs:
           }                  
         ]
         ```
+        While this isn't the most user-friendly way to define custom buttons, Bitrise step
+        parsing is currently limited to string value inputs and does not allow defining a YAML object list, which
+        has been [feature requested here](https://github.com/bitrise-io/go-steputils/issues/23).
 
   - repository_url: $GIT_REPOSITORY_URL
     opts:
