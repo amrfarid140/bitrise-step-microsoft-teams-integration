@@ -1,3 +1,13 @@
+## [2.0.0] - 28th Feb 2021
+
+* [#14] Added ability to declare custom `MessageCard` actions via JSON string
+* [#17] Bumped step to use Go 1.16
+* [#18] Added additional Go test steps to `step.yml`
+* [#19] Fix `MessageCard` `ActivityImage` input
+	* now correctly displays an image if image URL declared in step input
+* [#20] BREAKING: Step now uses "yes|no" values for inputs that were previously `bool` values
+
+
 ## [1.2.2] - 18th Feb 2021
 
 * Clean up Gopkg.* files, no longer required since migrating to Go Modules
