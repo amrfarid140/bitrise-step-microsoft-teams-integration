@@ -133,6 +133,12 @@ inputs:
       title: "Section Image"
       summary: "Image that is displayed within the MessageCard Section `activityImage`"
 
+  - section_image:
+      opts:
+        category: "MessageCard Image"
+        title: "Image"
+        summary: "Image that is displayed within the MessageCard Section `images`"
+
   - enable_default_actions: "yes"
     opts:
       category: "MessageCard Actions"

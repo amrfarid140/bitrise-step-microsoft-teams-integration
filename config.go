@@ -24,6 +24,7 @@ type config struct {
 	SectionSubtitle              string `env:"section_subtitle"`
 	SectionText                  string `env:"section_text"`
 	SectionHeaderImage           string `env:"section_header_image"`
+	SectionImage                 string `env:"section_image"`
 	EnablePrimarySectionMarkdown string `env:"enable_primary_section_markdown"`
 	EnableBuildFactsMarkdown     string `env:"enable_build_status_facts_markdown"`
 	EnableDefaultActions         string `env:"enable_default_actions"`

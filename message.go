@@ -19,12 +19,8 @@ type Section struct {
 	Facts            []Fact    `json:"facts"`
 	Markdown         bool      `json:"markdown"`
 	Text             string    `json:"text"`
-	HeroImage        HeroImage `json:"heroImage"`
-}
-
-// HeroImage that is displayed within the Message
-type HeroImage struct {
-	Image string `json:"image"`
+	HeroImage        Image     `json:"heroImage"`
+	Images           []Image   `json:"images"`
 }
 
 // Fact related to the message
@@ -44,4 +40,10 @@ type OpenURIAction struct {
 type Target struct {
 	OS  string `json:"os"`
 	URI string `json:"uri"`
+}
+
+// Image that is displayed within the Images section
+type Image struct {
+	Image string `json:"image"`
+	Title string `json:"title"`
 }

@@ -52,7 +52,8 @@ func newMessage(cfg config, buildSuccessful bool) Message {
 	// MessageCard sections
 	primarySection := buildPrimarySection(cfg)
 	factsSection := buildFactsSection(cfg, buildSuccessful)
-	message.Sections = []Section{primarySection, factsSection}
+	imagesSection := buildImagesSection(cfg)
+	message.Sections = []Section{primarySection, factsSection, imagesSection}
 
 	// MessageCard Actions
 	actions := []OpenURIAction{}
@@ -136,6 +137,13 @@ func buildFactsSection(cfg config, buildSuccessful bool) Section {
 		Markdown: valueOptionToBool(cfg.EnableBuildFactsMarkdown),
 		Facts:    []Fact{buildStatusFact, buildNumberFact, buildBranchFact, buildTimeFact, workflowFact},
 	}
+}
+
+// Builds a Section containing a list of Image
+func buildImagesSection(cfg config) Section {
+	section := Section{}
+	section.Images = []Image{cfg.SectionImage}
+	return section
 }
 
 func buildURIAction(action Action) OpenURIAction {

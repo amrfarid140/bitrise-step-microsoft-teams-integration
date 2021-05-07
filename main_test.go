@@ -26,6 +26,7 @@ var mockConfig = config{
 	SectionSubtitle:              "Commit message",
 	SectionText:                  "Commit message body",
 	SectionHeaderImage:           "",
+	SectionImage:                 "",
 	EnablePrimarySectionMarkdown: "no",
 	EnableBuildFactsMarkdown:     "no",
 	EnableDefaultActions:         "yes",
@@ -183,6 +184,10 @@ func TestBuildFactsSection(t *testing.T) {
 			t.Errorf("Test failed: config input was %v, expected %v", test.input, test.expected)
 		}
 	}
+}
+
+func TestBuildImagesSection(t *testing.T) {
+
 }
 
 func TestNewMessage(t *testing.T) {
