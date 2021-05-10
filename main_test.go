@@ -187,7 +187,45 @@ func TestBuildFactsSection(t *testing.T) {
 }
 
 func TestBuildImagesSection(t *testing.T) {
+	var defaultValuesConfig = config{
+		SectionImage:            "https://www.example.com/image.png",
+		SectionImageDescription: "This is the image description",
+	}
+	var emptyDescriptionConfig = config{
+		SectionImage: "https://www.example.com/image.png",
+	}
+	var tests = []struct {
+		input    config
+		expected Section
+	}{
+		{
+			defaultValuesConfig,
+			Section{
+				Images: []Image{
+					{
+						Image: defaultValuesConfig.SectionImage,
+						Title: defaultValuesConfig.SectionImageDescription,
+					},
+				},
+			},
+		},
+		{
+			emptyDescriptionConfig,
+			Section{
+				Images: []Image{
+					{
+						Image: emptyDescriptionConfig.SectionImage,
+					},
+				},
+			},
+		},
+	}
 
+	for _, test := range tests {
+		if output := buildImagesSection(test.input); !reflect.DeepEqual(output, test.expected) {
+			t.Errorf("Test failed: config input was %v, expected %v", test.input, test.expected)
+		}
+	}
 }
 
 func TestNewMessage(t *testing.T) {
@@ -216,7 +254,7 @@ func TestNewMessage(t *testing.T) {
 			},
 		},
 		Markdown:  valueOptionToBool(mockConfig.EnableBuildFactsMarkdown),
-		HeroImage: HeroImage{},
+		HeroImage: Image{},
 	}
 
 	var buildFailedFacts = Section{
@@ -243,7 +281,7 @@ func TestNewMessage(t *testing.T) {
 			},
 		},
 		Markdown:  valueOptionToBool(mockConfig.EnableBuildFactsMarkdown),
-		HeroImage: HeroImage{},
+		HeroImage: Image{},
 	}
 
 	var primarySection = Section{
@@ -252,7 +290,16 @@ func TestNewMessage(t *testing.T) {
 		ActivityImage:    mockConfig.SectionHeaderImage,
 		Markdown:         valueOptionToBool(mockConfig.EnablePrimarySectionMarkdown),
 		Text:             mockConfig.SectionText,
-		HeroImage:        HeroImage{},
+		HeroImage:        Image{},
+	}
+
+	var imagesSection = Section{
+		Images: []Image{
+			{
+				Image: mockConfig.SectionImage,
+				Title: mockConfig.SectionImageDescription,
+			},
+		},
 	}
 
 	var buildSuccessMessage = Message{
@@ -262,7 +309,7 @@ func TestNewMessage(t *testing.T) {
 		Title:      mockConfig.CardTitle,
 		Summary:    fmt.Sprintf("%v #%v succeeded", mockConfig.AppTitle, mockConfig.BuildNumber),
 		// Be mindful of list order
-		Sections: []Section{primarySection, buildSuccessFacts},
+		Sections: []Section{primarySection, buildSuccessFacts, imagesSection},
 		Actions: []OpenURIAction{
 			{
 				Type: "OpenUri",
@@ -312,7 +359,7 @@ func TestNewMessage(t *testing.T) {
 		Title:      mockConfig.CardTitle,
 		Summary:    fmt.Sprintf("%v #%v failed", mockConfig.AppTitle, mockConfig.BuildNumber),
 		// Be mindful of list order
-		Sections: []Section{primarySection, buildFailedFacts},
+		Sections: []Section{primarySection, buildFailedFacts, imagesSection},
 		Actions: []OpenURIAction{
 			{
 				Type: "OpenUri",

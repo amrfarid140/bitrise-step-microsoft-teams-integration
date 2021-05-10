@@ -142,7 +142,11 @@ func buildFactsSection(cfg config, buildSuccessful bool) Section {
 // Builds a Section containing a list of Image
 func buildImagesSection(cfg config) Section {
 	section := Section{}
-	section.Images = []Image{cfg.SectionImage}
+	image := Image{
+		Image: cfg.SectionImage,
+		Title: cfg.SectionImageDescription,
+	}
+	section.Images = []Image{image}
 	return section
 }
 

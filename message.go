@@ -13,14 +13,14 @@ type Message struct {
 
 // Section to be shown in the message
 type Section struct {
-	ActivityTitle    string    `json:"activityTitle"`
-	ActivitySubtitle string    `json:"activitySubtitle"`
-	ActivityImage    string    `json:"activityImage"`
-	Facts            []Fact    `json:"facts"`
-	Markdown         bool      `json:"markdown"`
-	Text             string    `json:"text"`
-	HeroImage        Image     `json:"heroImage"`
-	Images           []Image   `json:"images"`
+	ActivityTitle    string  `json:"activityTitle"`
+	ActivitySubtitle string  `json:"activitySubtitle"`
+	ActivityImage    string  `json:"activityImage"`
+	Facts            []Fact  `json:"facts"`
+	Markdown         bool    `json:"markdown"`
+	Text             string  `json:"text"`
+	HeroImage        Image   `json:"heroImage"`
+	Images           []Image `json:"images"`
 }
 
 // Fact related to the message
@@ -42,7 +42,7 @@ type Target struct {
 	URI string `json:"uri"`
 }
 
-// Image that is displayed within the Images section
+// Image that is displayed either within the Images section or as a HeroImage.
 type Image struct {
 	Image string `json:"image"`
 	Title string `json:"title"`
