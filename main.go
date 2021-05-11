@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
 	"github.com/bitrise-io/go-steputils/stepconf"
+	"github.com/bitrise-io/go-utils/colorstring"
 )
 
 var buildSucceeded = os.Getenv("BITRISE_BUILD_STATUS") == "0"
@@ -31,6 +33,25 @@ func optionalUserValue(defaultValue, userValue string) string {
 
 func valueOptionToBool(userValue string) bool {
 	return userValue == "yes"
+}
+
+func parseTimeString(cfg config) string {
+	var timeAtLoc time.Time
+	i, err := strconv.ParseInt(cfg.BuildTime, 10, 64)
+	if err != nil {
+		return string("Couldn't parse build time")
+	}
+	loc, err := time.LoadLocation(cfg.Timezone)
+	if err != nil {
+		fmt.Println(colorstring.Redf("\n%s", err))
+		fmt.Println(colorstring.Cyan("\nExporting time in UTC...\n"))
+
+		timeAtLoc = time.Unix(i, 0).In(time.UTC)
+		return timeAtLoc.Format(time.RFC1123)
+	}
+	timeAtLoc = time.Unix(i, 0).In(loc)
+
+	return timeAtLoc.Format(time.RFC1123)
 }
 
 func newMessage(cfg config, buildSuccessful bool) Message {
@@ -116,15 +137,9 @@ func buildFactsSection(cfg config, buildSuccessful bool) Section {
 		Value: cfg.GitBranch,
 	}
 
-	i, err := strconv.ParseInt(cfg.BuildTime, 10, 64)
-	if err != nil {
-		_ = fmt.Errorf("failed to parse the given build time: %s", err)
-	}
-	// Force UTC, as it otherwise defaults to locale of executing system
-	parsedTime := time.Unix(i, 0).In(time.UTC)
 	buildTimeFact := Fact{
 		Name:  "Build Triggered",
-		Value: parsedTime.Format(time.RFC1123),
+		Value: parseTimeString(cfg),
 	}
 
 	workflowFact := Fact{
@@ -160,9 +175,8 @@ func postMessage(webhookURL string, msg Message, debugEnabled bool) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(fmt.Sprintf("Request to Microsoft Teams: %s", webhookURL))
 	if debugEnabled {
-		fmt.Println(fmt.Sprintf("JSON body: %s\n", b))
+		log.Println(colorstring.Yellowf("\nRequest to Microsoft Teams:\n%s", b))
 	}
 
 	resp, err := http.Post(webhookURL, "application/json", bytes.NewReader(b))
@@ -189,16 +203,14 @@ func postMessage(webhookURL string, msg Message, debugEnabled bool) error {
 func main() {
 	var cfg config
 	if err := stepconf.Parse(&cfg); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
-		os.Exit(1)
+		log.Fatalf("Error: %s\n", err)
 	}
 	stepconf.Print(cfg)
 
 	message := newMessage(cfg, buildSucceeded)
 	if err := postMessage(cfg.WebhookURL, message, valueOptionToBool(cfg.EnableDebug)); err != nil {
-		fmt.Println(fmt.Sprintf("Error: %s", err))
-		os.Exit(1)
+		log.Fatalf("Error: %s", err)
 	}
 
-	fmt.Println("Message successfully sent!")
+	fmt.Println(colorstring.Cyan("\nMessage successfully sent!"))
 }

@@ -81,6 +81,49 @@ func TestOptionalUserValue(t *testing.T) {
 	}
 }
 
+func TestParseTimeString(t *testing.T) {
+
+	var tests = []struct {
+		input    config
+		expected string
+	}{
+		// successful UTC
+		{
+			mockConfig,
+			parsedUnixTime,
+		},
+		// successful local
+		{
+			config{
+				BuildTime: unixTimeString,
+				Timezone:  "Australia/Sydney",
+			},
+			"Sat, 16 Jan 2021 14:44:52 AEDT",
+		},
+		// invalid timezone, returns UTC
+		{
+			config{
+				BuildTime: unixTimeString,
+				Timezone:  "Bermuda Triangle",
+			},
+			parsedUnixTime,
+		},
+		// invalid `buildTime``
+		{
+			config{
+				BuildTime: "unixTimeString",
+			},
+			string("Couldn't parse build time"),
+		},
+	}
+
+	for _, test := range tests {
+		if output := parseTimeString(test.input); output != test.expected {
+			t.Errorf("Test failed: output was %v, expected %v", output, test.expected)
+		}
+	}
+}
+
 func TestBuildPrimarySection(t *testing.T) {
 	var defaultValuesConfig = config{
 		SectionTitle:                 "Some author",
