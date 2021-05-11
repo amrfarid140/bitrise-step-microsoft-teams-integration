@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/bitrise-io/go-utils/colorstring"
 )
 
 // Action object within the `actions` JSON object array.
@@ -21,8 +23,8 @@ func parseActions(jsonString string) []Action {
 	var actionList []Action
 	err := json.Unmarshal([]byte(jsonString), &actionList)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("Couldn't Unmarshal JSON: %v, \n %s", jsonString, err))
+		fmt.Println(colorstring.Redf("Couldn't Unmarshal JSON: %v, \n %s", jsonString, err))
 	}
-	fmt.Println(fmt.Sprintf("JSON value: %v", actionList))
+	fmt.Printf("JSON value: %v", actionList)
 	return actionList
 }

@@ -176,7 +176,7 @@ func postMessage(webhookURL string, msg Message, debugEnabled bool) error {
 		return err
 	}
 	if debugEnabled {
-		log.Println(colorstring.Yellowf("\nRequest to Microsoft Teams:\n%s", b))
+		log.Print(colorstring.Yellowf("\nRequest to Microsoft Teams:\n%s", b))
 	}
 
 	resp, err := http.Post(webhookURL, "application/json", bytes.NewReader(b))
