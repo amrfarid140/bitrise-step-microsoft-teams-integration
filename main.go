@@ -72,8 +72,9 @@ func newMessage(cfg config, buildSuccessful bool) Message {
 
 	// MessageCard sections
 	primarySection := buildPrimarySection(cfg)
+	imagesSection := buildImagesSection(cfg)
 	factsSection := buildFactsSection(cfg, buildSuccessful)
-	message.Sections = []Section{primarySection, factsSection}
+	message.Sections = []Section{primarySection, imagesSection, factsSection}
 
 	// MessageCard Actions
 	actions := []OpenURIAction{}
@@ -113,6 +114,19 @@ func buildPrimarySection(cfg config) Section {
 	section.Text = cfg.SectionText
 	section.ActivityImage = cfg.SectionHeaderImage
 	section.Markdown = valueOptionToBool(cfg.EnablePrimarySectionMarkdown)
+	return section
+}
+
+// Builds a Section containing a list of Image
+func buildImagesSection(cfg config) Section {
+	section := Section{}
+	if cfg.SectionImage != "" {
+		image := Image{
+			Image: cfg.SectionImage,
+			Title: cfg.SectionImageDescription,
+		}
+		section.Images = []Image{image}
+	}
 	return section
 }
 

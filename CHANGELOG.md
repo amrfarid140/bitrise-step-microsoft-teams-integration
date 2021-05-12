@@ -1,3 +1,7 @@
+## [2.1.0] -
+
+* [#29] Added ability to add custom image to `MessageCard`. 
+
 ## [2.0.0] - 28th Feb 2021
 
 * [#14] Added ability to declare custom `MessageCard` actions via JSON string
