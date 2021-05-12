@@ -32,4 +32,5 @@ type config struct {
 	EnableDebug                  string `env:"enable_debug"`
 	RepoURL                      string `env:"repository_url"`
 	Actions                      string `env:"actions"`
+	Timezone                     string `env:"timezone"`
 }

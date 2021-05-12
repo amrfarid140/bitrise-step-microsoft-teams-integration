@@ -226,3 +226,15 @@ inputs:
         * Select **Incoming Webhook* and in the text input type **Bitrise**
         * Save and copy the link to the input for this step
       is_required: true
+
+  - timezone: UTC
+    opts:
+      category: "MessageCard Content"
+      title: "Timezone"
+      summary: "Sets the timezone to use for the 'Build triggered' time"
+      description: |
+        Sets the timezone to use for the 'Build triggered' time in the MessageCard.
+
+        Defaults to UTC if no value is given.
+
+        Valid timezone name inputs can be [found here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).

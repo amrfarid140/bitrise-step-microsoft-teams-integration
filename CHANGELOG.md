@@ -1,5 +1,6 @@
 ## [2.1.0] -
 
+* [#28] Allow setting a custom timezone for 'Build Triggered' time
 * [#29] Added ability to add custom image to `MessageCard`. 
 
 ## [2.0.0] - 28th Feb 2021
