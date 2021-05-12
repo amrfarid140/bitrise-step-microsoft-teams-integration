@@ -51,9 +51,9 @@ func newMessage(cfg config, buildSuccessful bool) Message {
 
 	// MessageCard sections
 	primarySection := buildPrimarySection(cfg)
-	factsSection := buildFactsSection(cfg, buildSuccessful)
 	imagesSection := buildImagesSection(cfg)
-	message.Sections = []Section{primarySection, factsSection, imagesSection}
+	factsSection := buildFactsSection(cfg, buildSuccessful)
+	message.Sections = []Section{primarySection, imagesSection, factsSection}
 
 	// MessageCard Actions
 	actions := []OpenURIAction{}
@@ -93,6 +93,19 @@ func buildPrimarySection(cfg config) Section {
 	section.Text = cfg.SectionText
 	section.ActivityImage = cfg.SectionHeaderImage
 	section.Markdown = valueOptionToBool(cfg.EnablePrimarySectionMarkdown)
+	return section
+}
+
+// Builds a Section containing a list of Image
+func buildImagesSection(cfg config) Section {
+	section := Section{}
+	if cfg.SectionImage != "" {
+		image := Image{
+			Image: cfg.SectionImage,
+			Title: cfg.SectionImageDescription,
+		}
+		section.Images = []Image{image}
+	}
 	return section
 }
 
@@ -137,17 +150,6 @@ func buildFactsSection(cfg config, buildSuccessful bool) Section {
 		Markdown: valueOptionToBool(cfg.EnableBuildFactsMarkdown),
 		Facts:    []Fact{buildStatusFact, buildNumberFact, buildBranchFact, buildTimeFact, workflowFact},
 	}
-}
-
-// Builds a Section containing a list of Image
-func buildImagesSection(cfg config) Section {
-	section := Section{}
-	image := Image{
-		Image: cfg.SectionImage,
-		Title: cfg.SectionImageDescription,
-	}
-	section.Images = []Image{image}
-	return section
 }
 
 func buildURIAction(action Action) OpenURIAction {

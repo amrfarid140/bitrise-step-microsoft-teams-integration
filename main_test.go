@@ -194,6 +194,8 @@ func TestBuildImagesSection(t *testing.T) {
 	var emptyDescriptionConfig = config{
 		SectionImage: "https://www.example.com/image.png",
 	}
+	var emptyImageConfig = config{}
+
 	var tests = []struct {
 		input    config
 		expected Section
@@ -218,6 +220,10 @@ func TestBuildImagesSection(t *testing.T) {
 					},
 				},
 			},
+		},
+		{
+			emptyImageConfig,
+			Section{},
 		},
 	}
 
