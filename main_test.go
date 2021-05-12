@@ -26,7 +26,8 @@ var mockConfig = config{
 	SectionSubtitle:              "Commit message",
 	SectionText:                  "Commit message body",
 	SectionHeaderImage:           "",
-	SectionImage:                 "",
+	SectionImage:                 "https://www.example.com/image.png",
+	SectionImageDescription:      "A description of the image",
 	EnablePrimarySectionMarkdown: "no",
 	EnableBuildFactsMarkdown:     "no",
 	EnableDefaultActions:         "yes",
@@ -315,7 +316,7 @@ func TestNewMessage(t *testing.T) {
 		Title:      mockConfig.CardTitle,
 		Summary:    fmt.Sprintf("%v #%v succeeded", mockConfig.AppTitle, mockConfig.BuildNumber),
 		// Be mindful of list order
-		Sections: []Section{primarySection, buildSuccessFacts, imagesSection},
+		Sections: []Section{primarySection, imagesSection, buildSuccessFacts},
 		Actions: []OpenURIAction{
 			{
 				Type: "OpenUri",
@@ -365,7 +366,7 @@ func TestNewMessage(t *testing.T) {
 		Title:      mockConfig.CardTitle,
 		Summary:    fmt.Sprintf("%v #%v failed", mockConfig.AppTitle, mockConfig.BuildNumber),
 		// Be mindful of list order
-		Sections: []Section{primarySection, buildFailedFacts, imagesSection},
+		Sections: []Section{primarySection, imagesSection, buildFailedFacts},
 		Actions: []OpenURIAction{
 			{
 				Type: "OpenUri",
