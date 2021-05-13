@@ -134,16 +134,16 @@ inputs:
       summary: "Image that is displayed within the MessageCard Section `activityImage`"
 
   - section_image:
-      opts:
-        category: "MessageCard Image"
-        title: "Image"
-        summary: "Image that is displayed within the MessageCard Section `images`"
+    opts:
+      category: "MessageCard Image"
+      title: "Image"
+      summary: "Image that is displayed within the MessageCard Section `images`"
 
   - section_image_description:
-      opts:
-        category: "MessageCard Image"
-        title: "Image Description"
-        summary: "A short description of the image. Typically, description is displayed in a tooltip as the user hovers their mouse over the image."
+    opts:
+      category: "MessageCard Image"
+      title: "Image Description"
+      summary: "A short description of the image. Typically, description is displayed in a tooltip as the user hovers their mouse over the image."
 
   - enable_default_actions: "yes"
     opts:
