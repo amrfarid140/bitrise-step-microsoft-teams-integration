@@ -1,4 +1,8 @@
-## [2.1.0] -
+## [2.1.1] - 13th May 2021
+
+* [#32] Fix `step.yml` indentation
+
+## [2.1.0] - 13th May 2021
 
 * [#28] Allow setting a custom timezone for 'Build Triggered' time
 * [#29] Added ability to add custom image to `MessageCard`. 
